@@ -8,11 +8,15 @@ class Register extends Component {
         this.state = {
             email: '',
             password: '',
-            userName: ''
+            userName: '',
+            error: ''
         }
     }
+
+    redireccionar(){
+        this.props.navigation.navigate('Login')
+    }
     register(email, password) {
-        console.log('Email:', email, 'Pass:', password);
         if (
             (
                 email !== '' &&
@@ -25,11 +29,15 @@ class Register extends Component {
         ) {
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    this.props.navigation.navigate('Tab')
+                    this.setState({error: ''})
+                    this.props.navigation.navigate('Login')
                 })
                 .catch(error => {
-                    this.setState({ error: 'Fallo en el registro.' })
+                    console.log( 'Error Firebase', error.message )
+                    this.setState({ error: error.message })
                 })
+        }else{
+            this.setState({error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...'})
         }
     }
 
@@ -38,7 +46,6 @@ class Register extends Component {
     render() {
         return (
             <View>
-                <Text>Formulario de Registro</Text>
                 <TextInput
                     style={styles.input}
                     keyboardType="email-address"
@@ -61,10 +68,20 @@ class Register extends Component {
                     onChangeText={(text) => this.setState({ password: text })}
                     value={this.state.password}
                 />
+                {this.state.error != '' && (
+                    <Text> {this.state.error}</Text>
+                )}
 
-                <TouchableOpacity style={styles.button} onPress={() => this.register(this.state.email, this.state.password)}>
+                <TouchableOpacity style={styles.button} onPress={() => this.register(this.state.email, this.state.password, this.state.userName)}>
                     <Text style={styles.buttonText}>Registrate</Text>
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => this.redireccionar()}>
+                    <Text>Ir al Login</Text>
+
+                </TouchableOpacity>
+
+                
             </View>
         )
     }

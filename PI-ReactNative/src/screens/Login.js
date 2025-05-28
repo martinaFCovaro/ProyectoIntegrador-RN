@@ -10,13 +10,6 @@ class Login extends Component {
         }
     }
 
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.props.navigation.navigate('Tab')
-            }
-        })
-    }
     login(email, pass) {
         auth.signInWithEmailAndPassword(email, pass)
             .then((response) => {
@@ -29,7 +22,7 @@ class Login extends Component {
 
     render() {
         return (
-            <></>
+            <Text>hola</Text>
         )
     }
 
