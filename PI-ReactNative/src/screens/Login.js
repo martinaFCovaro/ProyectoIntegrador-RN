@@ -12,6 +12,14 @@ class Login extends Component {
         }
     }
 
+    componentDidMount() {
+auth.onAuthStateChanged(user => {
+    if(user){
+        this.props.navigation.navigate('Tab')
+    }
+})
+    }
+
     login(email, password) {
         if (email === '' || password === '') {
             this.setState({ error: 'Por favor completar todos los campos' })
