@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { auth } from '../firebase/config';
 
 class Perfil extends Component {
     constructor(props) {
@@ -14,7 +15,10 @@ class Perfil extends Component {
     }
     render() {
         return (
-            <></>
+
+<></>
+
+       
         )
     }
 
