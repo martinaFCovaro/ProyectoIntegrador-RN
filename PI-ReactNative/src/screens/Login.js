@@ -13,13 +13,17 @@ class Login extends Component {
     }
 
     login(email, password) {
-        auth.signInWithEmailAndPassword(email, password)
-            .then((response) => {
-                this.props.navigation.navigate('Tab')
-            })
-            .catch(error => {
-                this.setState({ error: 'Credenciales inválidas.' })
-            })
+        if (email === '' || password === '') {
+            this.setState({ error: 'Por favor completar todos los campos' })
+        } else {
+            auth.signInWithEmailAndPassword(email, password)
+                .then((response) => {
+                    this.props.navigation.navigate('Tab')
+                })
+                .catch(error => {
+                    this.setState({ error: 'Credenciales inválidas.' })
+                })
+        }
     }
 
     render() {
@@ -29,23 +33,33 @@ class Login extends Component {
                     style={styles.input}
                     keyboardType='email-address'
                     placeholder='Ingresá tu email'
-                    onChangeText={text => this.setState({email: text})}
+                    onChangeText={text => this.setState({ email: text })}
                     value={this.state.email}
                 />
                 <TextInput
                     style={styles.input}
                     keyboardType='default'
                     placeholder='Ingresá tu contraseña'
-                    onChangeText={text => this.setState({password: text})}
+                    onChangeText={text => this.setState({ password: text })}
+                    secureTextEntry={true}
                     value={this.state.password}
                 />
-                <TouchableOpacity 
-                onPress={() => this.login(this.state.email, this.state.password)}
-                style={styles.button}
+                {this.state.error != '' && (
+                    <Text> {this.state.error}</Text>
+                )}
+                <TouchableOpacity
+                    onPress={() => this.login(this.state.email, this.state.password)}
+                    style={styles.button}
                 >
                     <Text>Login</Text>
                 </TouchableOpacity>
-                
+                <Text>¿Todavía no sos usuario?</Text>
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('Register')}
+                    style={styles.button}
+                >
+                    <Text>Registrarme</Text>
+                </TouchableOpacity>
             </View>
         )
     }
