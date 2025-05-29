@@ -6,6 +6,7 @@ class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            error: ''
 
         }
     }
@@ -13,7 +14,7 @@ class Login extends Component {
     login(email, pass) {
         auth.signInWithEmailAndPassword(email, pass)
             .then((response) => {
-                this.setState({ loggedIn: true });
+                this.props.navigation.navigate('Tab')
             })
             .catch(error => {
                 this.setState({ error: 'Credenciales inválidas.' })

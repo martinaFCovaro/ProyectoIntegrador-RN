@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-import { auth } from '../firebase/config'
+import { auth, db } from '../firebase/config'
 
 class Register extends Component {
     constructor(props) {
@@ -13,10 +13,19 @@ class Register extends Component {
         }
     }
 
-    redireccionar(){
+    componentDidMount() {
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.props.navigation.navigate('Login')
+            } 
+        })
+    }
+
+    redireccionar() {
         this.props.navigation.navigate('Login')
     }
-    register(email, password) {
+    register(email, password, userName) {
         if (
             (
                 email !== '' &&
@@ -29,15 +38,24 @@ class Register extends Component {
         ) {
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    this.setState({error: ''})
-                    this.props.navigation.navigate('Login')
+
+                    db.collection('users').add({
+                        owner: email,
+                        createrAt: Date.now(),
+                        updatedAt: Date.now(),
+                        userName: userName
+                    })
+                        .then(() => {
+                            this.setState({ error: '' })
+                            this.props.navigation.navigate('Login')
+                        })
                 })
                 .catch(error => {
-                    console.log( 'Error Firebase', error.message )
+                    console.log('Error Firebase', error.message)
                     this.setState({ error: error.message })
                 })
-        }else{
-            this.setState({error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...'})
+        } else {
+            this.setState({ error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...' })
         }
     }
 
@@ -56,6 +74,7 @@ class Register extends Component {
 
                 <TextInput
                     style={styles.input}
+                    keyboardType="default"
                     placeholder="User Name..."
                     onChangeText={(text) => this.setState({ userName: text })}
                     value={this.state.userName}
@@ -63,6 +82,7 @@ class Register extends Component {
 
                 <TextInput
                     style={styles.input}
+                    keyboardType="default"
                     placeholder="Password..."
                     secureTextEntry={true}
                     onChangeText={(text) => this.setState({ password: text })}
@@ -81,7 +101,7 @@ class Register extends Component {
 
                 </TouchableOpacity>
 
-                
+
             </View>
         )
     }
@@ -91,22 +111,21 @@ export default Register;
 
 const styles = StyleSheet.create({
     input: {
-      borderWidth: 1,
-      borderColor: '#ccc',
-      margin: 10,
-      padding: 10,
-      borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
     },
     button: {
-      backgroundColor: '#28a745',
-      padding: 10,
-      margin: 10,
-      borderRadius: 5,
-      alignItems: 'center'
+        backgroundColor: '#28a745',
+        padding: 10,
+        margin: 10,
+        borderRadius: 5,
+        alignItems: 'center'
     },
     buttonText: {
-      color: 'white',
-      fontWeight: 'bold'
+        color: 'white',
+        fontWeight: 'bold'
     }
-  });
-  
+});
