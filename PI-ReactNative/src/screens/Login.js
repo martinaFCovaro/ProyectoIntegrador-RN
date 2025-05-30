@@ -1,6 +1,6 @@
 import { auth } from '../firebase/config'
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 
 class Login extends Component {
     constructor(props) {
@@ -9,6 +9,7 @@ class Login extends Component {
             email: '',
             password: '',
             error: '',
+            loading: false
         }
     }
 
@@ -24,12 +25,15 @@ auth.onAuthStateChanged(user => {
         if (email === '' || password === '') {
             this.setState({ error: 'Por favor completar todos los campos' })
         } else {
+            this.setState({ loading: true, error: '' });
+
             auth.signInWithEmailAndPassword(email, password)
                 .then((response) => {
+                    this.setState({ loading: false });
                     this.props.navigation.navigate('Tab')
                 })
                 .catch(error => {
-                    this.setState({ error: 'Credenciales inválidas.' })
+                    this.setState({ error: 'Credenciales inválidas.', loading:false })
                 })
         }
     }
@@ -37,6 +41,10 @@ auth.onAuthStateChanged(user => {
     render() {
         return (
             <View>
+                 {this.state.loading ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <>
                 <TextInput
                     style={styles.input}
                     keyboardType='email-address'
@@ -68,6 +76,8 @@ auth.onAuthStateChanged(user => {
                 >
                     <Text>Registrarme</Text>
                 </TouchableOpacity>
+                </>
+            )}
             </View>
         )
     }

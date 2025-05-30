@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import { Text, View, TouchableOpacity, TextInput, StyleSheet, ActivityIndicator } from 'react-native'
 import { auth, db } from '../firebase/config'
 
 class Register extends Component {
@@ -9,7 +9,8 @@ class Register extends Component {
             email: '',
             password: '',
             userName: '',
-            error: ''
+            error: '',
+            loading: false
         }
     }
 
@@ -34,6 +35,8 @@ class Register extends Component {
             &&
             email.includes('@')
         ) {
+            this.setState({ loading: true, error: '' });
+
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
 
@@ -45,12 +48,18 @@ class Register extends Component {
                     })
                         .then(() => {
                             this.setState({ error: '' })
+                            auth.signOut();
+                            this.setState({ loading: false });
                             this.props.navigation.navigate('Login')
+                        })
+                        .catch(error => {
+                            console.log('Error agregando usuario a la BD:', error.message)
+                            this.setState({ error: error.message, loading: false })
                         })
                 })
                 .catch(error => {
                     console.log('Error Firebase', error.message)
-                    this.setState({ error: error.message })
+                    this.setState({ error: error.message, loading:false })
                 })
         } else {
             this.setState({ error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...' })
@@ -60,6 +69,14 @@ class Register extends Component {
 
 
     render() {
+        if (this.state.loading) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                    <Text>Registrando usuario...</Text>
+                </View>
+            );
+        }
         return (
             <View>
                 <TextInput

@@ -46,14 +46,14 @@ export class Buscador extends Component {
                     placeholder='Busca un post...'
                     keyboardType='default'
                     value={this.state.busqueda}
-                    onChange={(texto) => this.setState({ busqueda: texto })}
+                    onChangeText={(texto) => this.setState({ busqueda: texto })}
                 />
-                {resultadosBusqueda.lenght === 0 && this.state.busqueda.trim() !== '' ? (
+                {resultadosBusqueda.length === 0 && this.state.busqueda.trim() !== '' ? (
                     <Text> No se encontraron resultados</Text>
                 ) : (
                     <FlatList
                         data={resultadosBusqueda}
-                        keyExtractor={({ item }) => item.id.toString()}
+                        keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <Text> {item.data.text} </Text>
                         )}
