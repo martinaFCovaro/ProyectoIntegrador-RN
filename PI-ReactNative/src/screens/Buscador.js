@@ -32,8 +32,8 @@ export class Buscador extends Component {
         }
         return posts.filter((post) => {
             return (
-                post.data.text &&
-                post.data.text.toLowerCase().includes(busqueda.toLowerCase())
+                post.data.comentario &&
+                post.data.comentario.toLowerCase().includes(busqueda.toLowerCase())
             )
         })
     }
@@ -55,7 +55,10 @@ export class Buscador extends Component {
                         data={resultadosBusqueda}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <Text> {item.data.text} </Text>
+                           <View>
+                            <Text> Post: {item.data.comentario} </Text>
+                            <Text>Creado por: {item.data.owner}</Text>
+                            </View>
                         )}
 
                     />
