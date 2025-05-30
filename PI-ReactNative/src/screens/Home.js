@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { db, auth } from '../firebase/config';
+import { FlatList } from 'react-native-web';
 
 
-class Home extends Component{
+class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,7 +28,7 @@ class Home extends Component{
         });
 
         this.setState({
-          posteos: posts
+          posts: posts
         });
       });
   }
@@ -35,7 +36,28 @@ class Home extends Component{
   render() {
     return (
       <View>
-        <Text></Text>
+        <Text>Bienvenido {auth.currentUser.email}</Text>
+        {
+          this.state.posts.length === 0 ? (
+            <Text>No hay posteos aún</Text>
+          ) : (
+            <View>
+              <Text>Posteos:</Text>
+              <FlatList
+                data={this.state.posts}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) =>
+                  <View>
+                    <Text>{item.data.comentario}</Text>
+                    <Text>Creado por: {item.data.owner}</Text>
+                    {/* Falta poner acá la cantidad de likes */}
+                    {/* Falta poner acá el botón de logout? */}
+                  </View>
+                }
+              />
+            </View>
+          )
+        }
       </View>
     )
 
