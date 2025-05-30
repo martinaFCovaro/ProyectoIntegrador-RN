@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { db } from '../firebase/config'
-import { FlatList, TextInput, TouchableOpacity } from 'react-native-web';
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { db } from '../firebase/config';
 
 export class Buscador extends Component {
     constructor(props) {
@@ -22,7 +21,7 @@ export class Buscador extends Component {
             this.setState({
                 posts: posts
             });
-        })
+        });
     }
 
     filtrarBusquedas() {
@@ -34,40 +33,111 @@ export class Buscador extends Component {
             return (
                 post.data.comentario &&
                 post.data.comentario.toLowerCase().includes(busqueda.toLowerCase())
-            )
-        })
+            );
+        });
     }
+
     render() {
         const resultadosBusqueda = this.filtrarBusquedas();
+
         return (
-            <View>
-                <Text> Buscar Posts</Text>
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Buscar Posts</Text>
+
                 <TextInput
-                    placeholder='Busca un post...'
+                    style={styles.input}
+                    placeholder='Ingresa tu busqueda...'
                     keyboardType='default'
                     value={this.state.busqueda}
                     onChangeText={(texto) => this.setState({ busqueda: texto })}
+                    placeholderTextColor="#b49c9c"
                 />
+
                 {resultadosBusqueda.length === 0 && this.state.busqueda.trim() !== '' ? (
-                    <Text> No se encontraron resultados</Text>
+                    <Text style={styles.noResultados}>No se encontraron resultados</Text>
                 ) : (
                     <FlatList
                         data={resultadosBusqueda}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                           <View>
-                            <Text> Post: {item.data.comentario} </Text>
-                            <Text>Creado por: {item.data.owner}</Text>
+                            <View style={styles.post}>
+                                <Text style={styles.textoComentario}>Post: {item.data.comentario}</Text>
+                                <Text style={styles.textoOwner}>Creado por: {item.data.owner}</Text>
                             </View>
                         )}
-
                     />
                 )}
-                <TouchableOpacity onPress={() => this.setState({ busqueda: "" })}>
-                    <Text >Limpiar búsqueda</Text>
+
+                <TouchableOpacity style={styles.botonLimpiar} onPress={() => this.setState({ busqueda: "" })}>
+                    <Text style={styles.textoLimpiar}>Limpiar búsqueda</Text>
                 </TouchableOpacity>
             </View>
-        )
+        );
     }
 }
+
 export default Buscador;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fffaf4',
+        padding: 20,
+    },
+    titulo: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: '#5e4b4b',
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#decfcf',
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#fcefe8',
+        color: '#4b3d3d',
+        marginBottom: 15
+    },
+    post: {
+        backgroundColor: '#fcefe8',
+        padding: 15,
+        borderRadius: 12,
+        marginBottom: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+    },
+    textoComentario: {
+        fontSize: 16,
+        color: '#4b3d3d',
+        marginBottom: 6,
+    },
+    textoOwner: {
+        fontSize: 14,
+        color: '#7b6f63',
+        fontStyle: 'italic',
+    },
+    noResultados: {
+        fontSize: 16,
+        color: '#a5978e',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        marginTop: 20
+    },
+    botonLimpiar: {
+        marginTop: 20,
+        alignSelf: 'center',
+        backgroundColor: '#d9a5b3',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10
+    },
+    textoLimpiar: {
+        color: '#fffaf4',
+        fontWeight: '600',
+        fontSize: 14
+    }
+});

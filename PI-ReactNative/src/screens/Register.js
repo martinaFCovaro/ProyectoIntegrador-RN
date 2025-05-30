@@ -15,31 +15,24 @@ class Register extends Component {
     }
 
     componentDidMount() {
-
-        auth.onAuthStateChanged((user) => {
-           
-        })
+        auth.onAuthStateChanged((user) => {})
     }
 
     redireccionar() {
         this.props.navigation.navigate('Login')
     }
+
     register(email, password, userName) {
         if (
-            (
-                email !== '' &&
-                password !== ''
-            )
-            &&
-            password.length >= 6
-            &&
+            email !== '' &&
+            password !== '' &&
+            password.length >= 6 &&
             email.includes('@')
         ) {
             this.setState({ loading: true, error: '' });
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-
                     db.collection('users').add({
                         owner: email,
                         createrAt: Date.now(),
@@ -47,64 +40,67 @@ class Register extends Component {
                         userName: userName
                     })
                         .then(() => {
-                            this.setState({ error: '' })
+                            this.setState({ error: '' });
                             auth.signOut();
                             this.setState({ loading: false });
                             this.props.navigation.navigate('Login')
                         })
                         .catch(error => {
-                            console.log('Error agregando usuario a la BD:', error.message)
                             this.setState({ error: error.message, loading: false })
                         })
                 })
                 .catch(error => {
-                    console.log('Error Firebase', error.message)
-                    this.setState({ error: error.message, loading:false })
+                    this.setState({ error: error.message, loading: false })
                 })
         } else {
             this.setState({ error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...' })
         }
     }
 
-
-
     render() {
         if (this.state.loading) {
             return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                    <Text>Registrando usuario...</Text>
+                <View style={styles.cargando}>
+                    <ActivityIndicator size="large" color="#a47179" />
+                    <Text style={styles.textoCargando}>Registrando usuario...</Text>
                 </View>
             );
         }
+
         return (
-            <View>
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Crear Cuenta</Text>
+
                 <TextInput
                     style={styles.input}
                     keyboardType="email-address"
                     placeholder="Email..."
                     onChangeText={(text) => this.setState({ email: text })}
                     value={this.state.email}
+                    placeholderTextColor="#b49c9c"
                 />
 
                 <TextInput
                     style={styles.input}
                     keyboardType="default"
-                    placeholder="User Name..."
+                    placeholder="Nombre de usuario..."
                     onChangeText={(text) => this.setState({ userName: text })}
                     value={this.state.userName}
+                    placeholderTextColor="#b49c9c"
                 />
 
                 <TextInput
                     style={styles.input}
                     keyboardType="default"
-                    placeholder="Password..."
+                    placeholder="Contraseña..."
                     secureTextEntry={true}
                     onChangeText={(text) => this.setState({ password: text })}
                     value={this.state.password}
+                    placeholderTextColor="#b49c9c"
                 />
-                {this.state.error != '' && (
-                    <Text> {this.state.error}</Text>
+
+                {this.state.error !== '' && (
+                    <Text style={styles.error}>{this.state.error}</Text>
                 )}
 
                 <TouchableOpacity style={styles.button} onPress={() => this.register(this.state.email, this.state.password, this.state.userName)}>
@@ -112,35 +108,75 @@ class Register extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => this.redireccionar()}>
-                    <Text>Ir al Login</Text>
-
+                    <Text style={styles.link}>¿Ya tenés cuenta? Ir al Login</Text>
                 </TouchableOpacity>
-
-
             </View>
         )
     }
-
 }
+
 export default Register;
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fffaf4',
+        padding: 30,
+        justifyContent: 'center',
+    },
+    titulo: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#5e4b4b',
+        marginBottom: 30,
+        textAlign: 'center'
+    },
     input: {
         borderWidth: 1,
-        borderColor: '#ccc',
-        margin: 10,
-        padding: 10,
-        borderRadius: 5,
+        borderColor: '#decfcf',
+        marginBottom: 15,
+        padding: 12,
+        borderRadius: 10,
+        backgroundColor: '#fcefe8',
+        color: '#4b3d3d'
     },
     button: {
-        backgroundColor: '#28a745',
-        padding: 10,
-        margin: 10,
-        borderRadius: 5,
-        alignItems: 'center'
+        backgroundColor: '#d9a5b3',
+        paddingVertical: 12,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
     },
     buttonText: {
-        color: 'white',
-        fontWeight: 'bold'
-    }
+        color: '#fffaf4',
+        fontWeight: '600',
+        fontSize: 16,
+    },
+    link: {
+        marginTop: 20,
+        color: '#a47179',
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    error: {
+        color: '#b03c3c',
+        fontSize: 14,
+        marginBottom: 10,
+        textAlign: 'center'
+    },
+    cargando: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#fffaf4',
+    },
+    textoCargando: {
+        marginTop: 10,
+        fontSize: 16,
+        color: '#a5978e',
+    },
 });
