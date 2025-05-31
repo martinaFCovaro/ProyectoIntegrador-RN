@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { db, auth } from '../firebase/config';
 import { FlatList } from 'react-native-web';
+import User from '../components/User'; 
 
 class Home extends Component {
   constructor(props) {
@@ -11,13 +12,12 @@ class Home extends Component {
       loading: true,
     }
   }
-
   componentDidMount() {
     if (!auth.currentUser) {
       this.props.navigation.navigate('Login')
     }
 
-    db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(
+    db.collection('posts').orderBy('createdAt', 'desc').limit(5).onSnapshot(
       docs => {
         let posts = [];
         docs.forEach(doc => {
@@ -33,6 +33,7 @@ class Home extends Component {
         });
       });
   }
+ 
 
   render() {
     if (this.state.loading) {
@@ -57,10 +58,7 @@ class Home extends Component {
                 data={this.state.posts}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) =>
-                  <View style={styles.post}>
-                    <Text style={styles.textoComentario}>{item.data.comentario}</Text>
-                    <Text style={styles.textoOwner}>Creado por: {item.data.owner}</Text>
-                  </View>
+                  <User item={item}  />
                 }
               />
             </View>
@@ -97,26 +95,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#7b5e57',
     marginVertical: 10,
-  },
-  post: {
-    backgroundColor: '#fcefe8',
-    padding: 15,
-    marginBottom: 12,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-  },
-  textoComentario: {
-    fontSize: 16,
-    color: '#4b3d3d',
-    marginBottom: 6,
-  },
-  textoOwner: {
-    fontSize: 14,
-    color: '#7b6f63',
-    fontStyle: 'italic',
   },
   cargando: {
     flex: 1,

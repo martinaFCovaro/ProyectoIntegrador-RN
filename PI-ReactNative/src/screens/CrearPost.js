@@ -7,21 +7,7 @@ export default class CrearPost extends Component {
     super(props)
     this.state = {
       comentario: "",
-      likes: []
     }
-  }
-
-  componentDidMount() {
-    db.collection('posts').onSnapshot(docs => {
-      let arr = [];
-      docs.forEach(doc => {
-        arr.push({
-          id: doc.id,
-          data: doc.data()
-        });
-      });
-      this.setState({ comentarios: arr });
-    });
   }
 
   publicarComentario() {
