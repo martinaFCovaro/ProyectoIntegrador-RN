@@ -46,43 +46,59 @@ export default class Perfil extends Component {
             .catch(err => console.log('err en signout', err))
     }
 
+    borrarPost(idDoc) {
+        db
+            .collection('posts')
+            .doc(idDoc)
+            .delete()
+            .then(() => {
+                console.log('Post eliminado');
+            })
+            .catch(err => console.log('Error al eliminar post:', err));
+    }
+
     render() {
         return (
-          <View style={styles.container}>
-            <Text style={styles.titulo}>Mi Perfil</Text>
-      
-            {this.state.InfoUsuario.length > 0 ? (
-              <>
-                <Text style={styles.label}>Usuario:</Text>
-                <Text style={styles.valor}>{this.state.InfoUsuario[0].data.userName}</Text>
-                <Text style={styles.label}>Email:</Text>
-                <Text style={styles.valor}>{this.state.InfoUsuario[0].data.owner}</Text>
-                <Text>Mis posteos:</Text>
-      
-                {this.state.misposts.length === 0 ? (
-                  <Text>No tenés posteos aún</Text>
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Mi Perfil</Text>
+
+                {this.state.InfoUsuario.length > 0 ? (
+                    <>
+                        <Text style={styles.label}>Usuario:</Text>
+                        <Text style={styles.valor}>{this.state.InfoUsuario[0].data.userName}</Text>
+                        <Text style={styles.label}>Email:</Text>
+                        <Text style={styles.valor}>{this.state.InfoUsuario[0].data.owner}</Text>
+                        <Text>Mis posteos:</Text>
+
+                        {this.state.misposts.length === 0 ? (
+                            <Text>No tenés posteos aún</Text>
+                        ) : (
+                            <FlatList
+                                data={this.state.misposts}
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({ item }) => (
+                                    <View>
+                                        <Text>{item.data.comentario}</Text>
+                                        <TouchableOpacity
+                                            onPress={() => this.borrarPost(item.id)}
+                                        >
+                                            <Text>Eliminar</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            />
+                        )}
+                    </>
                 ) : (
-                  <FlatList
-                    data={this.state.misposts}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                      <View>
-                        <Text>{item.data.comentario}</Text>
-                      </View>
-                    )}
-                  />
+                    <Text style={styles.vacio}>Información no disponible</Text>
                 )}
-              </>
-            ) : (
-              <Text style={styles.vacio}>Información no disponible</Text>
-            )}
-      
-            <TouchableOpacity style={styles.botonLogout} onPress={() => this.logout()}>
-              <Text style={styles.textoLogout}>Cerrar Sesión</Text>
-            </TouchableOpacity>
-          </View>
+
+                <TouchableOpacity style={styles.botonLogout} onPress={() => this.logout()}>
+                    <Text style={styles.textoLogout}>Cerrar Sesión</Text>
+                </TouchableOpacity>
+            </View>
         );
-      }
+    }
 }
 
 const styles = StyleSheet.create({
