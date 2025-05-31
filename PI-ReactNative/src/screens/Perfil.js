@@ -1,12 +1,14 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Component } from "react";
 import { db, auth } from "../firebase/config";
+import { FlatList } from 'react-native-web';
 
 export default class Perfil extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            InfoUsuario: []
+            InfoUsuario: [],
+            misposts: []
         }
     }
 
@@ -14,20 +16,28 @@ export default class Perfil extends Component {
         db.collection("users")
             .where("owner", "==", auth.currentUser.email)
             .onSnapshot(docs => {
-                let arrDocs = []
-                docs.forEach(
-                    (doc) => {
-                        arrDocs.push({
-                            id: doc.id,
-                            data: doc.data()
-                        })
-                    }
-                )
+                let arrDocs = [];
+                docs.forEach(doc => {
+                    arrDocs.push({
+                        id: doc.id,
+                        data: doc.data()
+                    });
+                });
+                this.setState({ InfoUsuario: arrDocs });
+            });
 
-                this.setState({
-                    InfoUsuario: arrDocs
-                }, () => console.log("Este es el estado", this.state))
-            })
+        db.collection("posts")
+            .where("owner", "==", auth.currentUser.email)
+            .onSnapshot(docs => {
+                let posteos = [];
+                docs.forEach(doc => {
+                    posteos.push({
+                        id: doc.id,
+                        data: doc.data()
+                    });
+                });
+                this.setState({ misposts: posteos });
+            });
     }
 
     logout() {
@@ -38,27 +48,41 @@ export default class Perfil extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.titulo}>Perfil</Text>
-
-                {
-                    this.state.InfoUsuario.length > 0 ?
-                        <>
-                            <Text style={styles.label}>Usuario:</Text>
-                            <Text style={styles.valor}>{this.state.InfoUsuario[0].data.userName}</Text>
-                            <Text style={styles.label}>Email:</Text>
-                            <Text style={styles.valor}>{this.state.InfoUsuario[0].data.owner}</Text>
-                        </>
-                        :
-                        <Text style={styles.vacio}>Información no disponible</Text>
-                }
-
-                <TouchableOpacity style={styles.botonLogout} onPress={() => this.logout()}>
-                    <Text style={styles.textoLogout}>Cerrar Sesión</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
+          <View style={styles.container}>
+            <Text style={styles.titulo}>Mi Perfil</Text>
+      
+            {this.state.InfoUsuario.length > 0 ? (
+              <>
+                <Text style={styles.label}>Usuario:</Text>
+                <Text style={styles.valor}>{this.state.InfoUsuario[0].data.userName}</Text>
+                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.valor}>{this.state.InfoUsuario[0].data.owner}</Text>
+                <Text>Mis posteos:</Text>
+      
+                {this.state.misposts.length === 0 ? (
+                  <Text>No tenés posteos aún</Text>
+                ) : (
+                  <FlatList
+                    data={this.state.misposts}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                      <View>
+                        <Text>{item.data.comentario}</Text>
+                      </View>
+                    )}
+                  />
+                )}
+              </>
+            ) : (
+              <Text style={styles.vacio}>Información no disponible</Text>
+            )}
+      
+            <TouchableOpacity style={styles.botonLogout} onPress={() => this.logout()}>
+              <Text style={styles.textoLogout}>Cerrar Sesión</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }
 }
 
 const styles = StyleSheet.create({
