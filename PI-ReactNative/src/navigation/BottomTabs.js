@@ -17,13 +17,13 @@ function BottomTabs() {
     return (
         <Tab.Navigator>
             <Tab.Screen name='Home' component={Home}
-            options={{tabBarIcon: () => <AntDesign name="home" size={24} color="black" />}}/>
+                options={{ tabBarIcon: () => <AntDesign name="home" size={24} color="black" /> }} />
             <Tab.Screen name='Perfil' component={Perfil}
-            options={{tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} color="black" />}}/>
-           <Tab.Screen name= 'Buscador' component={Buscador} 
-           options={{tabBarIcon: () => <Feather name="search" size={24} color="black" />}}/>
-           <Tab.Screen name='CrearPost' component={CrearPost}
-            options={{tabBarIcon: () => <AntDesign name="camerao" size={24} color="black" />}}/>
+                options={{ tabBarIcon: () => <MaterialCommunityIcons name="face-man-profile" size={24} color="black" /> }} />
+            <Tab.Screen name='Buscador' component={Buscador}
+                options={{ tabBarIcon: () => <Feather name="search" size={24} color="black" /> }} />
+            <Tab.Screen name='CrearPost' component={CrearPost}
+                options={{ tabBarIcon: () => <AntDesign name="camerao" size={24} color="black" /> }} />
         </Tab.Navigator>
 
     )

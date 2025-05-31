@@ -15,7 +15,7 @@ class Register extends Component {
     }
 
     componentDidMount() {
-        auth.onAuthStateChanged((user) => {})
+        auth.onAuthStateChanged((user) => { })
     }
 
     redireccionar() {

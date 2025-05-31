@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#eed3d9',
         paddingTop: 6,
         paddingBottom: 6,
-        paddingRight:15,
+        paddingRight: 15,
         paddingLeft: 15,
         borderRadius: 6,
         marginTop: 5
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         color: '#5e4b4b',
         fontWeight: '600'
     },
-    tituloPosteos:{
+    tituloPosteos: {
         fontSize: 18,
         fontWeight: '600',
         color: '#5e4b4b',

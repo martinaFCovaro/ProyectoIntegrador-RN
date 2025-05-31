@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator } from 'react-native';
 import { db, auth } from '../firebase/config';
 import { FlatList } from 'react-native-web';
-import User from '../components/User'; 
+import User from '../components/User';
 
 class Home extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class Home extends Component {
         });
       });
   }
- 
+
 
   render() {
     if (this.state.loading) {
@@ -58,7 +58,7 @@ class Home extends Component {
                 data={this.state.posts}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) =>
-                  <User item={item}  />
+                  <User item={item} />
                 }
               />
             </>
