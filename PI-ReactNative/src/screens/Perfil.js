@@ -68,21 +68,22 @@ export default class Perfil extends Component {
                         <Text style={styles.valor}>{this.state.InfoUsuario[0].data.userName}</Text>
                         <Text style={styles.label}>Email:</Text>
                         <Text style={styles.valor}>{this.state.InfoUsuario[0].data.owner}</Text>
-                        <Text>Mis posteos:</Text>
+                        <Text style={styles.tituloPosteos} >Mis posteos:</Text>
 
                         {this.state.misposts.length === 0 ? (
-                            <Text>No tenés posteos aún</Text>
+                            <Text style={styles.vacio}>No tenés posteos aún</Text>
                         ) : (
                             <FlatList
                                 data={this.state.misposts}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
-                                    <View>
-                                        <Text>{item.data.comentario}</Text>
+                                    <View style={styles.posteoContainer}>
+                                        <Text style={styles.textoComentario}>{item.data.comentario}</Text>
                                         <TouchableOpacity
                                             onPress={() => this.borrarPost(item.id)}
+                                            style={styles.botonEliminar}
                                         >
-                                            <Text>Eliminar</Text>
+                                            <Text style={styles.textoBotonEliminar}>Eliminar</Text>
                                         </TouchableOpacity>
                                     </View>
                                 )}
@@ -146,5 +147,40 @@ const styles = StyleSheet.create({
         color: '#5e4b4b',
         fontSize: 16,
         fontWeight: '600'
+    },
+    posteoContainer: {
+        backgroundColor: '#fcefe8',
+        padding: 15,
+        marginBottom: 12,
+        borderRadius: 12,
+        width: 280,
+        alignItems: 'center'
+    },
+    textoComentario: {
+        fontSize: 16,
+        color: '#4b3d3d',
+        marginBottom: 10,
+        textAlign: 'center'
+    },
+    botonEliminar: {
+        backgroundColor: '#eed3d9',
+        paddingTop: 6,
+        paddingBottom: 6,
+        paddingRight:15,
+        paddingLeft: 15,
+        borderRadius: 6,
+        marginTop: 5
+    },
+    textoBotonEliminar: {
+        color: '#5e4b4b',
+        fontWeight: '600'
+    },
+    tituloPosteos:{
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#5e4b4b',
+        marginTop: 25,
+        marginBottom: 10,
+        textAlign: 'center'
     }
 });
