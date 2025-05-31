@@ -17,7 +17,7 @@ class Home extends Component {
       this.props.navigation.navigate('Login')
     }
 
-    db.collection('posts').orderBy('createdAt', 'desc').limit(5).onSnapshot(
+    db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(
       docs => {
         let posts = [];
         docs.forEach(doc => {
@@ -52,7 +52,7 @@ class Home extends Component {
           this.state.posts.length === 0 ? (
             <Text style={styles.sinPosteos}>No hay posteos aún</Text>
           ) : (
-            <View>
+            <>
               <Text style={styles.tituloPosteos}>Posteos:</Text>
               <FlatList
                 data={this.state.posts}
@@ -61,7 +61,7 @@ class Home extends Component {
                   <User item={item}  />
                 }
               />
-            </View>
+            </>
           )
         }
       </View>

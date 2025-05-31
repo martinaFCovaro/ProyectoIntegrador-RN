@@ -46,6 +46,7 @@ class User extends Component {
             <View style={styles.post}>
                 <Text style={styles.textoComentario}>{this.props.item.data.comentario}</Text>
                 <Text style={styles.textoOwner}>Creado por: {this.props.item.data.owner}</Text>
+                <Text style={styles.textoLikes}>{this.props.item.data.likes.length} me gusta</Text>
                 {
                     this.state.DarLike ?
                         <TouchableOpacity
@@ -68,10 +69,20 @@ class User extends Component {
 }
 const styles = StyleSheet.create({
     btnlike: {
-        backgroundColor: "red"
+        backgroundColor: '#eed3d9',
+        padding: 8,
+        borderRadius: 6,
+        alignItems: 'center',
+        marginTop: 6,
+        width: 150
     },
     btnlike2: {
-        backgroundColor: "blue"
+        backgroundColor: '#d4b0a4',
+        padding: 8,
+        borderRadius: 6,
+        alignItems: 'center',
+        marginTop: 6,
+        width: 150,
     },
     post: {
         backgroundColor: '#fcefe8',
@@ -92,6 +103,12 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#7b6f63',
         fontStyle: 'italic',
+    },
+    textoLikes: {
+        fontSize: 14,
+        color: '#a47179',
+        marginTop: 4,
+        marginBottom: 8,
     }
 });
 export default User;
