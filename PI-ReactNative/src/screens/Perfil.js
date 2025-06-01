@@ -37,6 +37,7 @@ export default class Perfil extends Component {
                         data: doc.data()
                     });
                 });
+                posteos.sort((a, b) => b.data.createdAt - a.data.createdAt);
                 this.setState({ misposts: posteos });
             });
     }
@@ -50,7 +51,6 @@ export default class Perfil extends Component {
     borrarPost(idDoc) {
         db
             .collection('posts')
-            .orderBy("createdAt", "desc")
             .doc(idDoc)
             .delete()
             .then(() => {
