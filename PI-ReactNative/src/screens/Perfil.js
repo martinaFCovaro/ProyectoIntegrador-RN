@@ -50,6 +50,7 @@ export default class Perfil extends Component {
     borrarPost(idDoc) {
         db
             .collection('posts')
+            .orderBy("createdAt", "desc")
             .doc(idDoc)
             .delete()
             .then(() => {
