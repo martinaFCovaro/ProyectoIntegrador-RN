@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import { Component } from "react";
 import { db, auth } from "../firebase/config";
-import { FlatList } from 'react-native-web';
+import { FlatList } from 'react-native';
+import User from '../components/User'
 
 export default class Perfil extends Component {
     constructor(props) {
@@ -77,15 +78,7 @@ export default class Perfil extends Component {
                                 data={this.state.misposts}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
-                                    <View style={styles.posteoContainer}>
-                                        <Text style={styles.textoComentario}>{item.data.comentario}</Text>
-                                        <TouchableOpacity
-                                            onPress={() => this.borrarPost(item.id)}
-                                            style={styles.botonEliminar}
-                                        >
-                                            <Text style={styles.textoBotonEliminar}>Eliminar</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                                        <User item={item} borrarPost={(id) => this.borrarPost(id)} />
                                 )}
                             />
                         )}
@@ -161,19 +154,6 @@ const styles = StyleSheet.create({
         color: '#4b3d3d',
         marginBottom: 10,
         textAlign: 'center'
-    },
-    botonEliminar: {
-        backgroundColor: '#eed3d9',
-        paddingTop: 6,
-        paddingBottom: 6,
-        paddingRight: 15,
-        paddingLeft: 15,
-        borderRadius: 6,
-        marginTop: 5
-    },
-    textoBotonEliminar: {
-        color: '#5e4b4b',
-        fontWeight: '600'
     },
     tituloPosteos: {
         fontSize: 18,
