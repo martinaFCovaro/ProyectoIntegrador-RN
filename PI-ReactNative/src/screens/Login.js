@@ -14,7 +14,7 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        auth.onAuthStateChanged(user => {
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 this.props.navigation.navigate('Tab')
             }
@@ -22,19 +22,23 @@ class Login extends Component {
     }
 
     login(email, password) {
-        if (email === '' || password === '') {
-            this.setState({ error: 'Por favor completar todos los campos' })
-        } else {
-            this.setState({ loading: true, error: '' });
-
+        if (
+            email !== '' &&
+            password !== '' &&
+            password.length >= 6 &&
+            email.includes('@')
+        ) {
+            this.setState({ loading: true, error: '' })
             auth.signInWithEmailAndPassword(email, password)
-                .then((response) => {
+                .then(() => {
                     this.setState({ loading: false });
                     this.props.navigation.navigate('Tab')
                 })
                 .catch(error => {
                     this.setState({ error: 'Credenciales inválidas.', loading: false })
                 })
+        } else {
+            this.setState({ error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...' })
         }
     }
 
