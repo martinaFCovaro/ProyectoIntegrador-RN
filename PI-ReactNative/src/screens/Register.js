@@ -14,14 +14,6 @@ class Register extends Component {
         }
     }
 
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => { })
-    }
-
-    redireccionar() {
-        this.props.navigation.navigate('Login')
-    }
-
     register(email, password, userName) {
         if (
             email !== '' &&
@@ -33,27 +25,33 @@ class Register extends Component {
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    db.collection('users').add({
-                        owner: email,
-                        createrAt: Date.now(),
-                        updatedAt: Date.now(),
-                        userName: userName
-                    })
+                    auth.signOut()
                         .then(() => {
-                            this.setState({ error: '' });
-                            auth.signOut();
-                            this.setState({ loading: false });
-                            this.props.navigation.navigate('Login')
+                            db.collection('users').add({
+                                owner: email,
+                                createrAt: Date.now(),
+                                updatedAt: Date.now(),
+                                userName: userName
+                            })
+                                .then(() => {
+                                    this.setState({ error: '', loading: false });
+                                    this.props.navigation.navigate('Login');
+                                })
+                                .catch(error => {
+                                    this.setState({ error: error.message, loading: false });
+                                });
                         })
                         .catch(error => {
-                            this.setState({ error: error.message, loading: false })
-                        })
+                            this.setState({ error: 'Error al cerrar sesión', loading: false });
+                        });
                 })
                 .catch(error => {
-                    this.setState({ error: error.message, loading: false })
-                })
+                    this.setState({ error: error.message, loading: false });
+                });
         } else {
-            this.setState({ error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...' })
+            this.setState({
+                error: 'Todos los campos son obligatorios y la contraseña debe tener al menos 6 caracteres...'
+            });
         }
     }
 
@@ -103,11 +101,14 @@ class Register extends Component {
                     <Text style={styles.error}>{this.state.error}</Text>
                 )}
 
-                <TouchableOpacity style={styles.button} onPress={() => this.register(this.state.email, this.state.password, this.state.userName)}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => this.register(this.state.email, this.state.password, this.state.userName)}
+                >
                     <Text style={styles.buttonText}>Registrate</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => this.redireccionar()}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
                     <Text style={styles.link}>¿Ya tenés cuenta? Ir al Login</Text>
                 </TouchableOpacity>
             </View>
