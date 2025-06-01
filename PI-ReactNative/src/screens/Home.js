@@ -33,6 +33,16 @@ class Home extends Component {
         });
       });
   }
+  borrarPost(idDoc) {
+    db
+        .collection('posts')
+        .doc(idDoc)
+        .delete()
+        .then(() => {
+            console.log('Post eliminado');
+        })
+        .catch(err => console.log('Error al eliminar post:', err));
+}
 
 
   render() {
@@ -58,7 +68,7 @@ class Home extends Component {
                 data={this.state.posts}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) =>
-                  <User item={item} />
+                <User item={item} borrarPost={(id) => this.borrarPost(id)} />
                 }
               />
             </>
