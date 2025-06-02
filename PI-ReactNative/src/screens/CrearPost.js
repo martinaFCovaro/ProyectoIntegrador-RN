@@ -18,7 +18,10 @@ export default class CrearPost extends Component {
         comentario: this.state.comentario,
         likes: []
       })
-        .then(() => this.setState({ comentario: '' }))
+        .then(() => {
+          this.setState({ comentario: '' })
+          this.props.navigation.navigate('Home')
+        })
         .catch(error => console.log(error));
     }
   }
