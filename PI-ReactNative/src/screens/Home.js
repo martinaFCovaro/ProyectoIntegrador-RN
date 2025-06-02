@@ -57,7 +57,7 @@ class Home extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.tituloBienvenida}>Bienvenido {auth.currentUser.email}</Text>
+        <Text style={styles.tituloBienvenida}>Bienvenido! {auth.currentUser.email}</Text>
         {
           this.state.posts.length === 0 ? (
             <Text style={styles.sinPosteos}>No hay posteos aún</Text>
