@@ -68,7 +68,7 @@ class Home extends Component {
                 data={this.state.posts}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) =>
-                <User item={item} borrarPost={(id) => this.borrarPost(id)} />
+                <User item={item} />
                 }
               />
             </>
