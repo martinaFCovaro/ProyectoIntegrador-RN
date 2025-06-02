@@ -2,6 +2,9 @@ import { Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { Component } from 'react'
 import firebase from "firebase";
 import { db, auth } from '../firebase/config';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 class User extends Component {
     constructor(props) {
@@ -44,9 +47,9 @@ class User extends Component {
     render() {
         return (
             <View style={styles.post}>
-                <Text style={styles.textoComentario}>{this.props.item.data.comentario}</Text>
-                <Text style={styles.textoOwner}>Creado por: {this.props.item.data.owner}</Text>
-                <Text style={styles.textoLikes}>{this.props.item.data.likes.length} me gusta</Text>
+                <Text style={styles.textoComentario}><AntDesign name="message1" size={24} color="black" /> {this.props.item.data.comentario}</Text>
+                <Text style={styles.textoOwner}><AntDesign name="user" size={24} color="black" /> Creado por: {this.props.item.data.owner}</Text>
+                <Text style={styles.textoLikes}><FontAwesome5 name="hand-holding-heart" size={24} color="black" /> {this.props.item.data.likes.length} me gusta</Text>
                 {
                     this.state.DarLike ?
                         <TouchableOpacity
@@ -54,6 +57,7 @@ class User extends Component {
                             style={styles.btnlike2}
                         >
                             <Text>Sacar Like</Text>
+                            <Ionicons name="heart-dislike" size={24} color="black" />
                         </TouchableOpacity>
                         :
                         <TouchableOpacity
@@ -61,6 +65,7 @@ class User extends Component {
                             style={styles.btnlike}
                         >
                             <Text>Dar Like</Text>
+                            <FontAwesome5 name="heart" size={24} color="black" />
                         </TouchableOpacity>
                 }
                 <TouchableOpacity
@@ -68,11 +73,13 @@ class User extends Component {
                     style={styles.botonEliminar}
                 >
                     <Text style={styles.textoBotonEliminar}>Eliminar</Text>
+                    <AntDesign name="delete" size={24} color="black" />
                 </TouchableOpacity>
             </View>
         )
     }
 }
+
 const styles = StyleSheet.create({
     btnlike: {
         backgroundColor: '#eed3d9',
