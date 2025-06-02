@@ -2,7 +2,8 @@ import { View, Text, TouchableOpacity, StyleSheet, TextInput } from 'react-nativ
 import { Component } from "react";
 import { db, auth } from "../firebase/config";
 import { FlatList } from 'react-native';
-import User from '../components/User'
+import User from '../components/User';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default class Perfil extends Component {
     constructor(props) {
@@ -79,8 +80,20 @@ export default class Perfil extends Component {
                                 data={this.state.misposts}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
-                                        <User item={item} borrarPost={(id) => this.borrarPost(id)} />
+                                    <View>
+                                        <User item={item} />
+                                        <TouchableOpacity
+                                            onPress={() => this.borrarPost(item.id)}
+                                            style={styles.botonEliminar}
+                                        >
+                                            <View style={styles.containerEliminar}>
+                                                <Text style={styles.textoBotonEliminar}>Eliminar</Text>
+                                                <AntDesign name="delete" size={20} color="white" />
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
                                 )}
+
                             />
                         )}
                     </>
@@ -163,5 +176,29 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginBottom: 10,
         textAlign: 'center'
+    },
+    botonEliminar: {
+        backgroundColor: '#d9a5b3',
+        paddingTop: 6,
+        paddingBottom: 6,
+        alignSelf: "center",
+        paddingRight: 15,
+        paddingLeft: 15,
+        borderRadius: 6,
+        marginTop: 5,
+        width: 150,
+        alignItems: 'center',
+        marginBottom: 15,
+        height: 35,
+    },
+    textoBotonEliminar: {
+        color: '#fffaf4',
+        fontWeight: '600',
+        marginRight: 3
+    },
+    containerEliminar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });

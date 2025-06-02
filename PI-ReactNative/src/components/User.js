@@ -68,13 +68,6 @@ class User extends Component {
                             <FontAwesome5 name="heart" size={24} color="black" />
                         </TouchableOpacity>
                 }
-                <TouchableOpacity
-                    onPress={() => this.props.borrarPost(this.props.item.id)}
-                    style={styles.botonEliminar}
-                >
-                    <Text style={styles.textoBotonEliminar}>Eliminar</Text>
-                    <AntDesign name="delete" size={24} color="black" />
-                </TouchableOpacity>
             </View>
         )
     }
@@ -127,22 +120,6 @@ const styles = StyleSheet.create({
         marginTop: 4,
         marginBottom: 8,
         alignSelf: "center",
-    },
-    botonEliminar: {
-        backgroundColor: '#d9a5b3',
-        paddingTop: 6,
-        paddingBottom: 6,
-        alignSelf: "center",
-        paddingRight: 15,
-        paddingLeft: 15,
-        borderRadius: 6,
-        marginTop: 5,
-        width: 150,
-        alignItems: 'center'
-    },
-    textoBotonEliminar: {
-        color: '#fffaf4',
-        fontWeight: '600'
     }
 });
 export default User;
