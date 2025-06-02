@@ -83,6 +83,7 @@ class User extends Component {
 const styles = StyleSheet.create({
     btnlike: {
         backgroundColor: '#eed3d9',
+        alignSelf: "center",
         padding: 8,
         borderRadius: 6,
         alignItems: 'center',
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     btnlike2: {
         backgroundColor: '#d4b0a4',
         padding: 8,
+        alignSelf: "center",
         borderRadius: 6,
         alignItems: 'center',
         marginTop: 6,
@@ -109,11 +111,13 @@ const styles = StyleSheet.create({
     },
     textoComentario: {
         fontSize: 16,
+        alignSelf: "center",
         color: '#4b3d3d',
         marginBottom: 6,
     },
     textoOwner: {
         fontSize: 14,
+        alignSelf: "center",
         color: '#7b6f63',
         fontStyle: 'italic',
     },
@@ -122,11 +126,13 @@ const styles = StyleSheet.create({
         color: '#a47179',
         marginTop: 4,
         marginBottom: 8,
+        alignSelf: "center",
     },
     botonEliminar: {
         backgroundColor: '#d9a5b3',
         paddingTop: 6,
         paddingBottom: 6,
+        alignSelf: "center",
         paddingRight: 15,
         paddingLeft: 15,
         borderRadius: 6,
